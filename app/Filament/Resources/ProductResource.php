@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
-use App\Filament\Resources\ProductResource\RelationManagers;
-use App\Models\CategoryProduct;
 use App\Models\Product;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -12,18 +10,19 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\ViewField;
-use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Set;
 use Illuminate\Support\Str;
 
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
+
+    protected static ?string $navigationGroup = 'Cadastros';
+
+    protected static ?int $navigationSort = 1;
+
+    protected static ?string $navigationLabel = 'Produtos';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
@@ -55,10 +54,10 @@ class ProductResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('title'),
-                Tables\Columns\TextColumn::make('category.name'),
-                Tables\Columns\TextColumn::make('start_date'),
-                Tables\Columns\TextColumn::make('end_date'),
+                Tables\Columns\TextColumn::make('title')->label('Título'),
+                Tables\Columns\TextColumn::make('category.name')->label('Categoria'),
+                Tables\Columns\TextColumn::make('start_date')->label('Data início'),
+                Tables\Columns\TextColumn::make('end_date')->label('Data fim'),
             ])
             ->filters([
                 //
