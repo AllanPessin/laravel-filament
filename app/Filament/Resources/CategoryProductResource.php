@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryProductResource\Pages;
 use App\Models\CategoryProduct;
+use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -18,8 +19,6 @@ class CategoryProductResource extends Resource
 
     protected static ?string $navigationGroup = 'Categorias';
 
-    protected static ?int $navigationSort = 2;
-
     protected static ?string $navigationLabel = 'Categorias de Produtos';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
@@ -31,9 +30,6 @@ class CategoryProductResource extends Resource
                 Forms\Components\TextInput::make('name')->required()->label('Nome')
                     ->live(onBlur: true)
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
-                // Forms\Components\TextInput::make('name')->required()
-                //     ->live(onBlur: true)
-                //     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),,
                 Forms\Components\TextInput::make('slug')->required()->unique(),
             ]);
     }
@@ -49,6 +45,7 @@ class CategoryProductResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -71,5 +68,10 @@ class CategoryProductResource extends Resource
             'create' => Pages\CreateCategoryProduct::route('/create'),
             'edit' => Pages\EditCategoryProduct::route('/{record}/edit'),
         ];
+    }
+
+    public static function canDelete($record): bool
+    {
+        return !$record->products()->exists(); // Retorna falso se houver dependências
     }
 }
