@@ -19,9 +19,7 @@ class RoleResource extends Resource
 
     protected static ?string $navigationGroup = 'Configurações';
 
-    // protected static ?int $navigationSort = ;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Form $form): Form
     {
@@ -43,7 +41,9 @@ class RoleResource extends Resource
                 Tables\Columns\TextColumn::make('name')->label('Nome'),
                 Tables\Columns\TextColumn::make('permissions_count')
                     ->counts('permissions')
-                    ->colors(['success']),
+                    ->badge()
+                    ->colors(['success'])
+                    ->label('Permissões'),
             ])
             ->filters([
                 //

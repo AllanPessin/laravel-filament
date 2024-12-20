@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Status;
 use App\Filament\Resources\ProductResource\Pages;
 use App\Models\CategoryProduct;
 use App\Models\Product;
@@ -35,16 +36,20 @@ class ProductResource extends Resource
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
                 Forms\Components\TextInput::make('slug')->required()->unique(),
                 Section::make([
+                    Forms\Components\Select::make('status')
+                        ->options(Status::class)
+                        ->default('Published')
+                        ->label('Status'),
+                    Forms\Components\Select::make('category_id')
+                        ->relationship(name: 'category', titleAttribute: 'name')
+                        ->label('Categoria')
+                        ->required(),
                     Forms\Components\DatePicker::make('start_date')
                         ->required()
                         ->label('Data início')
                         ->default(fn(?string $date = null) => $date ? Carbon::now($date) : Carbon::now()),
                     Forms\Components\DatePicker::make('end_date')->label('Data fim'),
-                    Forms\Components\Select::make('category_id')
-                        ->relationship(name: 'category', titleAttribute: 'name')
-                        ->label('Categoria')
-                        ->required(),
-                ])->columns(['1' => 3, 'lg' => 3]),
+                ])->columns(['1' => 1, 'lg' => 4]),
                 Forms\Components\RichEditor::make('content')->required()->columnSpanFull()->label('Conteúdo'),
                 Forms\Components\Textarea::make('summary')->required()->rows(8)->columnSpanFull()->label('Resumo'),
             ])->columns(['sm' => 1]);
@@ -55,6 +60,7 @@ class ProductResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')->label('Título'),
+                Tables\Columns\TextColumn::make('status')->label('Status'),
                 Tables\Columns\TextColumn::make('category.name')->label('Categoria'),
                 Tables\Columns\TextColumn::make('start_date')->label('Data início'),
                 Tables\Columns\TextColumn::make('end_date')->label('Data fim'),
@@ -63,6 +69,8 @@ class ProductResource extends Resource
                 SelectFilter::make('category_id')
                     ->options(fn(): array => CategoryProduct::query()->pluck('name', 'id')->all())
                     ->label('Categorias'),
+                SelectFilter::make('status')
+                    ->options(Status::class)
             ])->persistFiltersInSession()
             ->actions([
                 Tables\Actions\EditAction::make(),
