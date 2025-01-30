@@ -15,6 +15,8 @@ class RoleResource extends Resource
 {
     protected static ?string $model = Role::class;
 
+    protected static ?String $slug = 'perfis';
+
     protected static ?string $navigationLabel = 'Perfil';
 
     protected static ?string $navigationGroup = 'Configurações';

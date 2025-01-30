@@ -18,6 +18,8 @@ class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
+    protected static ?String $slug = 'permissoes';
+
     protected static ?string $navigationLabel = 'Permissões';
 
     protected static ?string $navigationGroup = 'Configurações';
@@ -28,7 +30,10 @@ class PermissionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')->required()->label('Nome'),
+                Forms\Components\TextInput::make('name')
+                    ->required()
+                    ->unique(Permission::class, 'name', ignoreRecord: true)
+                    ->label('Nome'),
             ]);
     }
 

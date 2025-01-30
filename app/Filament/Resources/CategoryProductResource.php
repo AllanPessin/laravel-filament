@@ -18,6 +18,8 @@ class CategoryProductResource extends Resource
 {
     protected static ?string $model = CategoryProduct::class;
 
+    protected static ?String $slug = 'categorias-produto';
+
     protected static ?string $navigationGroup = 'Categorias';
 
     protected static ?string $navigationLabel = 'Categorias de Produtos';

@@ -21,6 +21,8 @@ class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
 
+    protected static ?String $slug = 'produtos';
+
     protected static ?string $navigationGroup = 'Cadastros';
 
     protected static ?string $navigationLabel = 'Produtos';
@@ -75,6 +77,7 @@ class ProductResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
